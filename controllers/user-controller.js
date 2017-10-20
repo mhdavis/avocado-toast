@@ -1,6 +1,9 @@
 const mdb = require("../models");
 const bcrypt = require("bcrypt-nodejs");
 
+
+// GET POST DELETE
+
 const User = {};
 
 // =================================================
@@ -73,7 +76,7 @@ User.delete = function(req, res) {
 
 // generates both hash and salt
 function genereateHash(password) {
-  return bcrypt.hashSync(password, bCrypy.genSaltSync(8), null);
+  return bcrypt.hashSync(password, bcrypt.genSaltSync(8), null);
 }
 
 module.exports = User;

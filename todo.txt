@@ -1,0 +1,12 @@
+Due Controller - CRUD
+- Field param specifies category
+
+User Controller - GET POST DELETE
+Session Controller
+
+User routes
+======================
+/Signup
+/Signin
+/Signout
+CRD User Stuff

@@ -18,7 +18,11 @@ const UserSchema = new Schema({
     required: true
   },
 
-  goals: [Goal]
+  monthly_income : [ Due ],
+
+  monthy_expenses:  [ Due ],
+
+  longterm_expenses: [ Due ]
 });
 
 const User = mongoose.model("User", UserSchema);
