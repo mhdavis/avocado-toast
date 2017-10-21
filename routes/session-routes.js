@@ -1,19 +1,36 @@
 const sessionController = require("../controllers/session-controller.js");
 const express = require("express");
 const router = express.Router();
-
-// NOTE: determine how to appropriately pass to router as middleware
-const passport = require("../config/passport.js");
+const passport = require("passport");
+const mdb = require("../models");
 
 router.use(passport);
 
 // Authentication Routing
 
 // logout route
-router.get("/logout", sessionController.logout);
+router.delete("/signout", (req, res) => {
+  req.session.destroy(function (err) {
+    res.json('session terminated');
+  });
+});
 
 // authenticate user route
-// NOTE: determine react alternative for redirect
-router.post('/', passport.authenticate('local-signin'));
+router.post('/signin', function (req, res, next) {
+
+  passport.authenticate('local', (err, user, info) => {
+    mdb.User.find({
+      username: user.username,
+      password: user.password
+    }, function (err, user) {
+      if (err) {
+        throw err;
+      } else {
+        res.json(user);
+      }
+    });
+  });
+
+});
 
 module.exports = router;
