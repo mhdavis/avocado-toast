@@ -51,8 +51,8 @@ User.update = function(req, res) {
   // Looks in the mdb for the username and password of user
 
   mdb.User.findOneAndUpdate({
-    'username': req.body.username,
-    'password': req.body.password
+    username: req.body.username,
+    password: req.body.password
   }, req.body, function (err, user) {
     if (err) {
       throw err;
@@ -72,6 +72,72 @@ User.delete = function(req, res) {
     }
     console.log("user deleted!");
   })
+}
+
+// =================================================
+// CREATE NEW USER DUE
+// =================================================
+User.createDue = function (req, res) {
+
+  User.findById(req.body.userId, function (err, user) {
+    const newDue = new mdb.Due({
+      description: req.body.description,
+      category: req.body.category,
+      amount: req.body.amount
+    });
+
+    const dueCategory = req.body.category;
+    user[dueCategory].push(newDue);
+
+    // define user
+
+    user.save(function (err) {
+      if (err) throw err;
+      res.send("Due created");
+    });
+  });
+
+};
+
+// =================================================
+// UPDATE EXISTING DUE
+// =================================================
+User.updateDue = function (req, res) {
+  const dueCategory = req.body.category;
+  /*
+  req.body.index
+  req.body.description
+  req.body.amount
+  */
+  User.findById(req.body.userId, function (err, user) {
+    user[dueCategory][req.body.index].set({
+      description: req.body.description,
+      amount: req.body.amount
+    });
+
+
+    user.save(function (err) {
+      if (err) throw err;
+      res.send("Due Update");
+    });
+  });
+
+}
+
+// =================================================
+// DELETE EXISTING DUE
+// =================================================
+User.deleteDue = function (req, res) {
+  const dueCategory = req.body.category;
+
+  User.findById(req.body.userId, function (err, user) {
+    user[dueCategory][req.body.index].remove();
+
+  user.save(function (err) {
+    if (err) throw err;
+    res.send("Due Deleted");
+  })
+
 }
 
 // generates both hash and salt
