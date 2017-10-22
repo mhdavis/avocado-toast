@@ -21,7 +21,10 @@ User.create = function (req, res) {
     if (err) {
       throw err;
     } else {
-      res.json(doc);
+      // NOTE: req.login user then redirect to dashboard page?
+
+      // once user, is created; they can signin
+      res.redirect("/signin");
     }
   });
 }
@@ -71,6 +74,8 @@ User.delete = function(req, res) {
       throw err;
     }
     console.log("user deleted!");
+    // redirect user to signin page
+    res.redirect('/signin');
   })
 }
 

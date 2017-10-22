@@ -3,22 +3,32 @@ const express = require("express");
 const router = express.Router();
 const passport = require("passport");
 const mdb = require("../models");
+const userController = require("../controllers/user-controller.js");
 
 router.use(passport);
 
-// Authentication Routing
+/*
+Rather than writing the controllers seperately from
+the session routes, the controllers for each route
+were in the callback slot of each route handler.
+*/
 
-// logout route
-router.delete("/signout", (req, res) => {
+// =================================================
+// END  USER SESSION
+// =================================================
+router.delete("/signout", function (req, res) {
   req.session.destroy(function (err) {
     res.json('session terminated');
   });
 });
 
-// authenticate user route
-router.post('/signin', function (req, res, next) {
+// =================================================
+// AUTHENTICATE USER AND RETURN USER DATA
+// =================================================
+router.post('/signin', function (req, res) {
 
   passport.authenticate('local', (err, user, info) => {
+    if (err) throw err;
     mdb.User.find({
       username: user.username,
       password: user.password
@@ -31,6 +41,9 @@ router.post('/signin', function (req, res, next) {
     });
   });
 
-});
+// =================================================
+// CREATE NEW USER
+// =================================================
+router.post('/signup', userController.create);
 
 module.exports = router;
