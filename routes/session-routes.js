@@ -1,8 +1,8 @@
-const sessionController = require("../controllers/session-controller.js");
 const express = require("express");
 const router = express.Router();
 const passport = require("passport");
 const mdb = require("../models");
+const sessionController = require("../controllers/session-controller.js");
 const userController = require("../controllers/user-controller.js");
 
 router.use(passport);

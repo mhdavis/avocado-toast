@@ -19,6 +19,4 @@ const DueSchema = new Schema({
   }
 });
 
-const Goal = mongoose.model("Due", DueSchema);
-
-module.exports = Due;
+module.exports = DueSchema;
