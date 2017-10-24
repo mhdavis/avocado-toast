@@ -1,20 +1,21 @@
 import axios from "axios";
 
 export default {
-  // Gets all books
-  getBooks: function() {
-    return axios.get("/api/books");
+  getDues: function(category) {
+    // get specific user information via mongoose
+    // send back array of dues with specific category
+    console.log("Get Dues Method");
   },
-  // Gets the book with the given id
-  getBook: function(id) {
-    return axios.get("/api/books/" + id);
+
+  createDue: function(category, due) {
+    console.log("Create Due Method");
   },
-  // Deletes the book with the given id
-  deleteBook: function(id) {
-    return axios.delete("/api/books/" + id);
+
+  deleteDue: function(category, id) {
+    console.log("Delete Due Method");
   },
-  // Saves a book to the database
-  saveBook: function(bookData) {
-    return axios.post("/api/books", bookData);
+
+  editDue: function(category, id) {
+    console.log("Edit Due Method");
   }
 };
