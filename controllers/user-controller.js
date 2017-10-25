@@ -1,4 +1,4 @@
-const mdb = require("../models/User");
+const User = require("../models/User");
 const bcrypt = require("bcrypt-nodejs");
 
 
@@ -6,23 +6,32 @@ const bcrypt = require("bcrypt-nodejs");
 
 const UserController = {};
 
+// +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+//                         GENERAL USER METHODS
+// +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
 // =================================================
 // CREATE NEW USER
 // =================================================
 UserController.create = function (req, res) {
-  // alteratively could just pass req.body
+  // req.body.username
+  // req.body.password
+  // req.body.name
+
+  console.log("====== CREATE USER REQ BODY ======");
+  console.log(req.body);
+  console.log("==================================");
   let newUser = new User({
     username: req.body.username,
     password: generateHash(req.body.password),
     name: req.body.name
   });
 
-  newUser.save(function (err, doc) {
+  User.create(newUser, function (err, user) {
     if (err) {
       throw err;
     } else {
-      // NOTE: req.login user then redirect to dashboard page?
-      res.send("User Created!");
+      res.json(user);
     }
   });
 }
@@ -31,14 +40,16 @@ UserController.create = function (req, res) {
 // GET USER DATA
 // =================================================
 UserController.show = function(req, res) {
+  // req.body.username
+  // req.body.password
   User.find({
     username: req.body.username,
     password: req.body.password
-  }, function (err, doc) {
+  }, function (err, user) {
     if (err) {
        throw err;
      } else {
-       res.json(doc);
+       res.json(user);
      }
   });
 }
@@ -48,13 +59,13 @@ UserController.show = function(req, res) {
 // =================================================
 UserController.update = function(req, res) {
   // ASSUMPTIONS
-  // req.body contains the new username or password
-  // Looks in the mdb for the username and password of user
+  // req.body.username
+  // req.body.password
 
-  mdb.User.findOneAndUpdate({
+  User.findOneAndUpdate({
     username: req.body.username,
     password: req.body.password
-  }, req.body, function (err, user) {
+  }, function (err, user) {
     if (err) {
       throw err;
     } else {
@@ -67,36 +78,47 @@ UserController.update = function(req, res) {
 // DELETE USER ACCOUNT
 // =================================================
 UserController.delete = function(req, res) {
-  mdb.User.findOneAndRemove(req.body, function (err) {
+  // req.body.userId
+
+  User.findOneAndRemove({
+    "_id": req.body.userId
+  }, function (err) {
     if (err) {
       throw err;
     }
-    console.log("user deleted!");
     // redirect user to signin page
-    res.redirect('/signin');
+    res.send(`User ${userId} deleted`);
   })
 }
+
+// +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+//                           USER DUE METHODS
+// +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 // =================================================
 // CREATE NEW USER DUE
 // =================================================
 UserController.createDue = function (req, res) {
+  // req.body.userId
+  // req.body.description
+  // req.body.category
+  // req.body.amount
 
-  User.findById(req.body.userId, function (err, user) {
-    const newDue = new mdb.Due({
-      description: req.body.description,
+  User.findOne({
+    "_id": req.body.userId
+  }, function (err, user) {
+    const newDue = {
       category: req.body.category,
+      description: req.body.description,
       amount: req.body.amount
-    });
+    };
 
     const dueCategory = req.body.category;
     user[dueCategory].push(newDue);
 
-    // define user
-
     user.save(function (err) {
       if (err) throw err;
-      res.send("Due created");
+      res.json(user);
     });
   });
 
@@ -106,22 +128,23 @@ UserController.createDue = function (req, res) {
 // UPDATE EXISTING DUE
 // =================================================
 UserController.updateDue = function (req, res) {
+  // req.body.userId
+  // req.body.dueId
+  // req.body.description
+  // req.body.amount
+
   const dueCategory = req.body.category;
-  /*
-  req.body.index
-  req.body.description
-  req.body.amount
-  */
+
   User.findById(req.body.userId, function (err, user) {
-    user[dueCategory][req.body.index].set({
+    user[dueCategory][req.body.dueId].set({
       description: req.body.description,
       amount: req.body.amount
     });
 
 
-    user.save(function (err) {
-      if (err) throw err;
-      res.send("Due Update");
+    user.save(function (error) {
+      if (error) throw error;
+      res.send("Due Updated");
     });
   });
 
@@ -131,10 +154,14 @@ UserController.updateDue = function (req, res) {
 // DELETE EXISTING DUE
 // =================================================
 UserController.deleteDue = function (req, res) {
+  // req.body.category
+  // req.body.userId
+  // req.body.dueId
+
   const dueCategory = req.body.category;
 
   User.findById(req.body.userId, function (err, user) {
-    user[dueCategory][req.body.index].remove();
+    userdueCategory.id(req.body.dueId).remove();
 
     user.save(function (err) {
       if (err) throw err;
@@ -144,7 +171,7 @@ UserController.deleteDue = function (req, res) {
 }
 
 // generates both hash and salt
-function genereateHash(password) {
+function generateHash(password) {
   return bcrypt.hashSync(password, bcrypt.genSaltSync(8), null);
 }
 

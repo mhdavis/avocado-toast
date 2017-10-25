@@ -37,7 +37,7 @@ app.get("*", function(req, res) {
 
 // Mongoose Connection
 // =======================================================
-mongoose.connect("mongod://loclahost/avocadotoast_db");
+mongoose.connect("mongodb://localhost/avocadotoast_db");
 const db = mongoose.connection;
 // Mongoose Errors
 db.on("error", error => console.log(`Mongoose Error: ${error}`));
