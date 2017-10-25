@@ -4,6 +4,7 @@ import NoMatch from "./pages/NoMatch";
 import Nav from "./components/Nav";
 import Dashboard from "./pages/Dashboard";
 import SignIn from "./pages/SignIn";
+import SignUp from "./pages/SignUp";
 
 const App = () =>
   <Router>
@@ -12,6 +13,7 @@ const App = () =>
       <Switch>
         <Route exact path="/" component={Dashboard} />
         <Route exact path="/SignIn" component={SignIn} />
+        <Route exact path="/SignUp" component={SignUp} />
         <Route component={NoMatch} />
       </Switch>
     </div>
