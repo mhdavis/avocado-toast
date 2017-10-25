@@ -1,26 +1,28 @@
 import React, { Component } from "react";
-import DeleteBtn from "../../components/DeleteBtn";
 import Jumbotron from "../../components/Jumbotron";
 import API from "../../utils/API";
 import { Link } from "react-router-dom";
 import { Col, Row, Container } from "../../components/Grid";
 import { List, ListItem } from "../../components/List";
 import { Input, TextArea, FormBtn } from "../../components/Form";
+import DueList from "../../components/DueList";
+import DueItem from "../../components/DueItem";
 
 class Tile extends Component {
   state = {
-    category: this.props.categoryName;
-    dues: [];
-  }
+    category: this.props.categoryName,
+    dues: []
+  };
 
-  componentDidMount() => {
-    this.getDues(this.state.category);
-  }
+  // componentDidMount() => {
+  //   this.getDues(this.state.category);
+  // }
 
   loadDues = () => {
-    API.getDues(this.state.category);
-    .then(res => {
-      this.setState({ dues: res.dues })
+    API.getDues(this.state.category)
+    .then(res =>
+        this.setState({ dues: res.dues })
+      )
       .catch(err => console.log(err));
   };
 
@@ -79,7 +81,10 @@ class Tile extends Component {
               <h3>No Dues to Display</h3>
             )}
           </Col>
+        </Row>
       </Container>
     );
   }
 }
+
+export default Tile;

@@ -1,9 +1,16 @@
 import React, { Component } from "react";
-import EditBtn from "../../component/EditBtn";
+import EditBtn from "../../components/EditBtn";
 import DeleteBtn from "../../components/DeleteBtn";
+import API from "../../utils/API";
 
 
 class DueItem extends Component {
+  state = {
+    key: this.props.key,
+    description: this.props.description,
+    amount: this.props.amount
+  }
+
   deleteDue = () => {
     API.deleteDue()
     .then(res => {});
@@ -17,10 +24,10 @@ class DueItem extends Component {
   render() {
     return (
       <li>
-        <p>{props.description}</p>
-        <p>{props.amount}</p>
-        <EditBtn onClick={() => this.editDue(due._id)} />
-        <DeleteBtn onClick={() => this.deleteDue(due._id)} />
+        <p>{this.props.description}</p>
+        <p>{this.props.amount}</p>
+        <EditBtn onClick={() => this.editDue(this.state.key)} />
+        <DeleteBtn onClick={() => this.deleteDue(this.state.key)} />
       </li>
     );
   }
