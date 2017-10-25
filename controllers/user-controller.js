@@ -42,6 +42,10 @@ UserController.create = function (req, res) {
 UserController.show = function(req, res) {
   // req.body.username
   // req.body.password
+
+  console.log("====== SHOW USER REQ BODY ======");
+  console.log(req.body);
+  console.log("================================");
   User.find({
     username: req.body.username,
     password: req.body.password
@@ -62,6 +66,9 @@ UserController.update = function(req, res) {
   // req.body.username
   // req.body.password
 
+  console.log("====== UPDATE USER REQ BODY ======");
+  console.log(req.body);
+  console.log("==================================");
   User.findOneAndUpdate({
     username: req.body.username,
     password: req.body.password
@@ -80,6 +87,9 @@ UserController.update = function(req, res) {
 UserController.delete = function(req, res) {
   // req.body.userId
 
+  console.log("====== DELETE USER REQ BODY ======");
+  console.log(req.body);
+  console.log("==================================");
   User.findOneAndRemove({
     "_id": req.body.userId
   }, function (err) {
@@ -103,6 +113,10 @@ UserController.createDue = function (req, res) {
   // req.body.description
   // req.body.category
   // req.body.amount
+
+  console.log("====== CREATE DUE REQ BODY ======");
+  console.log(req.body);
+  console.log("=================================");
 
   User.findOne({
     "_id": req.body.userId
@@ -133,10 +147,14 @@ UserController.updateDue = function (req, res) {
   // req.body.description
   // req.body.amount
 
+  console.log("====== UPDATE DUE REQ BODY ======");
+  console.log(req.body);
+  console.log("=================================");
+
   const dueCategory = req.body.category;
 
   User.findById(req.body.userId, function (err, user) {
-    user[dueCategory][req.body.dueId].set({
+    user.dueCategory.id(req.body.dueId).set({
       description: req.body.description,
       amount: req.body.amount
     });
@@ -158,10 +176,14 @@ UserController.deleteDue = function (req, res) {
   // req.body.userId
   // req.body.dueId
 
+  console.log("====== DELETE DUE REQ BODY ======");
+  console.log(req.body);
+  console.log("=================================");
+
   const dueCategory = req.body.category;
 
   User.findById(req.body.userId, function (err, user) {
-    userdueCategory.id(req.body.dueId).remove();
+    user.dueCategory.id(req.body.dueId).remove();
 
     user.save(function (err) {
       if (err) throw err;

@@ -20,7 +20,7 @@ This local strategy uses methods from the User model to compare
 the candidate username and password so as to verify the User
 and return back their data.
 */
-passport.use(new LocalStrategy(
+passport.use(new LocalStrategy (
   function(username, password, done) {
     // First checks the username
    User.getUserByUsername(username, function(err, user) {
@@ -75,7 +75,7 @@ router.post('/signup', userController.create);
 // =================================================
 // DELETE AN EXISTING USER ACCOUNT
 // =================================================
-router.delete('deleteAccount', userController.delete);
+router.delete('/deleteAccount', userController.delete);
 
 
 module.exports = router;
