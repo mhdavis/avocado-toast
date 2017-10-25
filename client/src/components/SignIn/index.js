@@ -26,12 +26,12 @@ class SignInForm extends Component {
   //     .catch(err => console.log(err));
   // };
 
-  // handleInputChange = event => {
-  //   const { name , value } = event.target;
-  //   this.setState({
-  //     [name]: value
-  //   });
-  // };
+  handleInputChange = event => {
+    const { name , value } = event.target;
+    this.setState({
+      [name]: value
+    });
+  };
 
   handleFormSubmit = event => {
     event.preventDefault();
@@ -53,8 +53,8 @@ class SignInForm extends Component {
               <Input
                 value={this.state.description}
                 onChange={this.handleInputChange}
-                name="Username"
-                placeholder="Username (required)"
+                name="username"
+                placeholder="username (required)"
               />
               <Input
                 value={this.state.amount}
