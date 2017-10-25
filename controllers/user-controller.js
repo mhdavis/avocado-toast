@@ -1,17 +1,17 @@
-const mdb = require("../models");
+const mdb = require("../models/User");
 const bcrypt = require("bcrypt-nodejs");
 
 
 // GET POST DELETE
 
-const User = {};
+const UserController = {};
 
 // =================================================
 // CREATE NEW USER
 // =================================================
-User.create = function (req, res) {
+UserController.create = function (req, res) {
   // alteratively could just pass req.body
-  let newUser = new mdb.User({
+  let newUser = new User({
     username: req.body.username,
     password: generateHash(req.body.password),
     name: req.body.name
@@ -22,9 +22,7 @@ User.create = function (req, res) {
       throw err;
     } else {
       // NOTE: req.login user then redirect to dashboard page?
-
-      // once user, is created; they can signin
-      res.redirect("/signin");
+      res.send("User Created!");
     }
   });
 }
@@ -32,8 +30,8 @@ User.create = function (req, res) {
 // =================================================
 // GET USER DATA
 // =================================================
-User.show = function(req, res) {
-  mdb.User.find({
+UserController.show = function(req, res) {
+  User.find({
     username: req.body.username,
     password: req.body.password
   }, function (err, doc) {
@@ -48,7 +46,7 @@ User.show = function(req, res) {
 // =================================================
 // UPDATE USER INFORMATION
 // =================================================
-User.update = function(req, res) {
+UserController.update = function(req, res) {
   // ASSUMPTIONS
   // req.body contains the new username or password
   // Looks in the mdb for the username and password of user
@@ -68,7 +66,7 @@ User.update = function(req, res) {
 // =================================================
 // DELETE USER ACCOUNT
 // =================================================
-User.delete = function(req, res) {
+UserController.delete = function(req, res) {
   mdb.User.findOneAndRemove(req.body, function (err) {
     if (err) {
       throw err;
@@ -82,7 +80,7 @@ User.delete = function(req, res) {
 // =================================================
 // CREATE NEW USER DUE
 // =================================================
-User.createDue = function (req, res) {
+UserController.createDue = function (req, res) {
 
   User.findById(req.body.userId, function (err, user) {
     const newDue = new mdb.Due({
@@ -107,7 +105,7 @@ User.createDue = function (req, res) {
 // =================================================
 // UPDATE EXISTING DUE
 // =================================================
-User.updateDue = function (req, res) {
+UserController.updateDue = function (req, res) {
   const dueCategory = req.body.category;
   /*
   req.body.index
@@ -132,17 +130,17 @@ User.updateDue = function (req, res) {
 // =================================================
 // DELETE EXISTING DUE
 // =================================================
-User.deleteDue = function (req, res) {
+UserController.deleteDue = function (req, res) {
   const dueCategory = req.body.category;
 
   User.findById(req.body.userId, function (err, user) {
     user[dueCategory][req.body.index].remove();
 
-  user.save(function (err) {
-    if (err) throw err;
-    res.send("Due Deleted");
-  })
-
+    user.save(function (err) {
+      if (err) throw err;
+      res.send("Due Deleted");
+    });
+  });
 }
 
 // generates both hash and salt
@@ -150,4 +148,4 @@ function genereateHash(password) {
   return bcrypt.hashSync(password, bcrypt.genSaltSync(8), null);
 }
 
-module.exports = User;
+module.exports = UserController;

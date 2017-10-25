@@ -10,7 +10,6 @@ import DueItem from "../../components/DueItem";
 
 class Tile extends Component {
   state = {
-    category: this.props.categoryName,
     dues: []
   };
 
@@ -19,7 +18,7 @@ class Tile extends Component {
   // }
 
   loadDues = () => {
-    API.getDues(this.state.category)
+    API.getDues(this.props.categoryName)
     .then(res =>
         this.setState({ dues: res.dues })
       )

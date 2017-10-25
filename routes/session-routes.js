@@ -1,11 +1,8 @@
 const express = require("express");
 const router = express.Router();
 const passport = require("passport");
-const mdb = require("../models");
-const sessionController = require("../controllers/session-controller.js");
+const User = require("../models/User.js");
 const userController = require("../controllers/user-controller.js");
-
-router.use(passport);
 
 /*
 Rather than writing the controllers seperately from
@@ -29,7 +26,7 @@ router.post('/signin', function (req, res) {
 
   passport.authenticate('local', (err, user, info) => {
     if (err) throw err;
-    mdb.User.find({
+    User.find({
       username: user.username,
       password: user.password
     }, function (err, user) {
@@ -40,6 +37,7 @@ router.post('/signin', function (req, res) {
       }
     });
   });
+});
 
 // =================================================
 // CREATE NEW USER
