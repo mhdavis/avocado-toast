@@ -1,0 +1,28 @@
+body {
+/*
+    font-family: Georgia,"Times New Roman",Times,serif;
+    font-size: 15px;
+    line-height: 1.42857143;
+*/
+    color: #777777;
+    background-color: rgba(255,255,255,0.1);
+}
+
+.navbar-inverse {
+    background-color: #22b24c;
+    border-color: #468847;
+}
+.jumbotron {
+    padding-top: 30px;
+    padding-bottom: 30px;
+    margin-bottom: 30px;
+    color: inherit;
+    background-color: #fcf8e37a;
+}
+.form-control {
+    color: #777777;
+    background-color: #ffffff;
+    background-image: none;
+    border: 1px solid #23b24b;
+    border-radius: 4px;
+}
