@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import NoMatch from "./pages/NoMatch";
 import Nav from "./components/Nav";
 import Dashboard from "./pages/Dashboard";
+import SignIn from "./pages/SignIn";
 
 const App = () =>
   <Router>
@@ -10,6 +11,7 @@ const App = () =>
       <Nav />
       <Switch>
         <Route exact path="/" component={Dashboard} />
+        <Route exact path="/SignIn" component={SignIn} />
         <Route component={NoMatch} />
       </Switch>
     </div>
