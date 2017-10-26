@@ -23,9 +23,5 @@ router.put('/due', userController.updateDue);
 // =================================================
 router.delete('/due', userController.deleteDue);
 
-// =================================================
-// DELETE THE USER ACCOUNT
-// =================================================
-router.delete('/delete', userController.delete);
 
 module.exports = router;

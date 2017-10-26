@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import NoMatch from "./pages/NoMatch";
 import Nav from "./components/Nav";
 import Dashboard from "./pages/Dashboard";
+import "./App.css";
 
 const App = () =>
   <Router>
