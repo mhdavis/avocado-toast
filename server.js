@@ -12,12 +12,20 @@ if (process.env.NODE_ENV === "production") {
 }
 
 const session = require("express-session");
+const cookieParser = require("cookie-parser");
 const bodyParser = require("body-parser");
+const MongoStore = require('connect-mongo')(session);
 
-// Passport configuration
+// Passport + Session Configuration
 // =======================================================
-app.use(session({ secret: process.env.SECRET }));
+app.use(cookieParser());
 app.use(bodyParser.urlencoded({ extended: false }));
+app.use(session({
+  secret: process.env.SECRET,
+  resave: false,
+  saveUninitialized: false,
+  store: new MongoStore({ mongooseConnection: mongoose.connection })
+ }));
 app.use(passport.initialize());
 app.use(passport.session());
 

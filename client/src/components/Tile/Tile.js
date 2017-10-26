@@ -44,10 +44,8 @@ class Tile extends Component {
 
   render() {
     return (
-      <Container fluid>
-        <Row>
           <Col size="md-6">
-            <Jumbotron>
+            <Jumbotron jumboClass={this.props.tileClass}>
               <h1>{this.props.tileName}</h1>
             </Jumbotron>
             <form>
@@ -80,8 +78,6 @@ class Tile extends Component {
               <h3>No Dues to Display</h3>
             )}
           </Col>
-        </Row>
-      </Container>
     );
   }
 }

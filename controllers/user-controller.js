@@ -21,19 +21,29 @@ UserController.create = function (req, res) {
   console.log("====== CREATE USER REQ BODY ======");
   console.log(req.body);
   console.log("==================================");
-  let newUser = new User({
+  User.findOne({
     username: req.body.username,
-    password: generateHash(req.body.password),
-    name: req.body.name
-  });
+    password: req.body.password
+  }, function (err, found) {
+    if (!found) {
+      let newUser = new User({
+        username: req.body.username,
+        password: generateHash(req.body.password),
+        name: req.body.name
+      });
 
-  User.create(newUser, function (err, user) {
-    if (err) {
-      throw err;
+      User.create(newUser, function (err, user) {
+        if (err) {
+          throw err;
+        } else {
+          res.json(user);
+        }
+      });
     } else {
-      res.json(user);
+      res.send("User already exists!");
     }
   });
+
 }
 
 // =================================================

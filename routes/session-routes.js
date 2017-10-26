@@ -4,7 +4,8 @@ const passport = require("passport");
 const LocalStrategy = require("passport-local").Strategy;
 const User = require("../models/User.js");
 const userController = require("../controllers/user-controller.js");
-const signinStrategy = require("../passport/LocalStrategy.js");
+const strategy = require("../passport/strategies.js");
+
 
 /*
 Rather than writing the controllers seperately from
@@ -13,50 +14,16 @@ were in the callback slot of each route handler.
 */
 
 // =================================================
-// PASSPORT SUPPLEMENTAL FUNCTIONS AND STRATEGY
-// =================================================
-/*
-This local strategy uses methods from the User model to compare
-the candidate username and password so as to verify the User
-and return back their data.
-*/
-passport.use(new LocalStrategy (
-  function(username, password, done) {
-    // First checks the username
-   User.getUserByUsername(username, function(err, user) {
-   	if (err) throw err;
-   	if (!user) {
-   		return done(null, false, {message: 'Unknown User'});
-   	}
-
-    // Then checks the password
-   	User.comparePassword(password, user.password, function(err, isMatch) {
-   		if (err) throw err;
-   		if (isMatch) {
-   			return done(null, user);
-   		} else {
-   			return done(null, false, {message: 'Invalid password'});
-   		}
-   	});
-   });
-
-  }));
-
-passport.serializeUser(function(user, done) {
-  done(null, user.id);
-});
-
-passport.deserializeUser(function(id, done) {
-  User.getUserById(id, function(err, user) {
-    done(err, user);
-  });
-});
-
-// =================================================
 // AUTHENTICATE USER AND RETURN USER DATA
 // =================================================
-router.post('/signin', passport.authenticate('local'), function (req, res) {
-  res.json(user);
+router.post('/signin', passport.authenticate('signin'), function (req, res) {
+  req.login({
+    username: req.body.username,
+    password: req.body.password
+  }, function (err) {
+    if (err) throw err;
+    res.json(user);
+  });
 });
 
 // =================================================
@@ -64,7 +31,7 @@ router.post('/signin', passport.authenticate('local'), function (req, res) {
 // =================================================
 router.get("/signout", function (req, res) {
     req.logout();
-    res.send('session terminated');
+    res.send('user logged out');
 });
 
 // =================================================
