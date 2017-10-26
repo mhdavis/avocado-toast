@@ -1,0 +1,20 @@
+body {
+  height: 100vh;
+  background-color: #61D961;
+}
+body {
+    background: url('../Images/avocado-Toast-1.gif') no-repeat center center fixed;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+	color:#fff;
+  	background-color:#333;
+  	font-family: 'Open Sans',Arial,Helvetica,Sans-Serif;
+}
+.at-tile {
+    background-color: rgba(105, 126, 41, .5);
+    padding: 1em;
+    border-radius: 10px;
+    margin: 0.5em;
+}

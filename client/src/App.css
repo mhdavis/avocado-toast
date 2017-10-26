@@ -2,3 +2,9 @@ body {
   height: 100vh;
   background-color: #61D961;
 }
+.at-tile {
+    background-color: rgba(105, 126, 41, .5);
+    padding: 1em;
+    border-radius: 10px;
+    margin: 0.5em;
+}
