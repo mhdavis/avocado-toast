@@ -1,11 +1,11 @@
 const express = require("express");
 const router = express.Router();
 const passport = require("passport");
-const mdb = require("../models");
-const sessionController = require("../controllers/session-controller.js");
+const LocalStrategy = require("passport-local").Strategy;
+const User = require("../models/User.js");
 const userController = require("../controllers/user-controller.js");
+const strategy = require("../passport/strategies.js");
 
-router.use(passport);
 
 /*
 Rather than writing the controllers seperately from
@@ -14,36 +14,35 @@ were in the callback slot of each route handler.
 */
 
 // =================================================
-// END  USER SESSION
+// AUTHENTICATE USER AND RETURN USER DATA
 // =================================================
-router.delete("/signout", function (req, res) {
-  req.session.destroy(function (err) {
-    res.json('session terminated');
+router.post('/signin', passport.authenticate('signin'), function (req, res) {
+  req.login({
+    username: req.body.username,
+    password: req.body.password
+  }, function (err) {
+    if (err) throw err;
+    res.json(user);
   });
 });
 
 // =================================================
-// AUTHENTICATE USER AND RETURN USER DATA
+// END USER SESSION
 // =================================================
-router.post('/signin', function (req, res) {
-
-  passport.authenticate('local', (err, user, info) => {
-    if (err) throw err;
-    mdb.User.find({
-      username: user.username,
-      password: user.password
-    }, function (err, user) {
-      if (err) {
-        throw err;
-      } else {
-        res.json(user);
-      }
-    });
-  });
+router.get("/signout", function (req, res) {
+    req.logout();
+    res.send('user logged out');
+});
 
 // =================================================
 // CREATE NEW USER
 // =================================================
 router.post('/signup', userController.create);
+
+// =================================================
+// DELETE AN EXISTING USER ACCOUNT
+// =================================================
+router.delete('/deleteAccount', userController.delete);
+
 
 module.exports = router;

@@ -1,46 +1,69 @@
-const mdb = require("../models");
+const User = require("../models/User");
 const bcrypt = require("bcrypt-nodejs");
 
 
 // GET POST DELETE
 
-const User = {};
+const UserController = {};
+
+// +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+//                         GENERAL USER METHODS
+// +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 // =================================================
 // CREATE NEW USER
 // =================================================
-User.create = function (req, res) {
-  // alteratively could just pass req.body
-  let newUser = new mdb.User({
+UserController.create = function (req, res) {
+  // req.body.username
+  // req.body.password
+  // req.body.name
+
+  console.log("====== CREATE USER REQ BODY ======");
+  console.log(req.body);
+  console.log("==================================");
+  User.findOne({
     username: req.body.username,
-    password: generateHash(req.body.password),
-    name: req.body.name
-  });
+    password: req.body.password
+  }, function (err, found) {
+    if (!found) {
+      let newUser = new User({
+        username: req.body.username,
+        password: generateHash(req.body.password),
+        name: req.body.name
+      });
 
-  newUser.save(function (err, doc) {
-    if (err) {
-      throw err;
+      User.create(newUser, function (err, user) {
+        if (err) {
+          throw err;
+        } else {
+          res.json(user);
+        }
+      });
     } else {
-      // NOTE: req.login user then redirect to dashboard page?
-
-      // once user, is created; they can signin
-      res.redirect("/signin");
+      res.send("User already exists!");
     }
   });
+
 }
 
 // =================================================
 // GET USER DATA
 // =================================================
-User.show = function(req, res) {
-  mdb.User.find({
+UserController.show = function(req, res) {
+  // req.body.username
+  // req.body.password
+
+  console.log("====== SHOW USER REQ BODY ======");
+  console.log(req.body);
+  console.log("================================");
+  User.find({
     username: req.body.username,
     password: req.body.password
-  }, function (err, doc) {
+  }, function (err, user) {
     if (err) {
        throw err;
      } else {
-       res.json(doc);
+       res.json(user);
      }
   });
 }
@@ -48,15 +71,18 @@ User.show = function(req, res) {
 // =================================================
 // UPDATE USER INFORMATION
 // =================================================
-User.update = function(req, res) {
+UserController.update = function(req, res) {
   // ASSUMPTIONS
-  // req.body contains the new username or password
-  // Looks in the mdb for the username and password of user
+  // req.body.username
+  // req.body.password
 
-  mdb.User.findOneAndUpdate({
+  console.log("====== UPDATE USER REQ BODY ======");
+  console.log(req.body);
+  console.log("==================================");
+  User.findOneAndUpdate({
     username: req.body.username,
     password: req.body.password
-  }, req.body, function (err, user) {
+  }, function (err, user) {
     if (err) {
       throw err;
     } else {
@@ -68,37 +94,55 @@ User.update = function(req, res) {
 // =================================================
 // DELETE USER ACCOUNT
 // =================================================
-User.delete = function(req, res) {
-  mdb.User.findOneAndRemove(req.body, function (err) {
+UserController.delete = function(req, res) {
+  // req.body.userId
+
+  console.log("====== DELETE USER REQ BODY ======");
+  console.log(req.body);
+  console.log("==================================");
+  User.findOneAndRemove({
+    "_id": req.body.userId
+  }, function (err) {
     if (err) {
       throw err;
     }
-    console.log("user deleted!");
     // redirect user to signin page
-    res.redirect('/signin');
+    res.send(`User ${userId} deleted`);
   })
 }
+
+// +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+//                           USER DUE METHODS
+// +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 // =================================================
 // CREATE NEW USER DUE
 // =================================================
-User.createDue = function (req, res) {
+UserController.createDue = function (req, res) {
+  // req.body.userId
+  // req.body.description
+  // req.body.category
+  // req.body.amount
 
-  User.findById(req.body.userId, function (err, user) {
-    const newDue = new mdb.Due({
-      description: req.body.description,
+  console.log("====== CREATE DUE REQ BODY ======");
+  console.log(req.body);
+  console.log("=================================");
+
+  User.findOne({
+    "_id": req.body.userId
+  }, function (err, user) {
+    const newDue = {
       category: req.body.category,
+      description: req.body.description,
       amount: req.body.amount
-    });
+    };
 
     const dueCategory = req.body.category;
     user[dueCategory].push(newDue);
 
-    // define user
-
     user.save(function (err) {
       if (err) throw err;
-      res.send("Due created");
+      res.json(user);
     });
   });
 
@@ -107,23 +151,28 @@ User.createDue = function (req, res) {
 // =================================================
 // UPDATE EXISTING DUE
 // =================================================
-User.updateDue = function (req, res) {
+UserController.updateDue = function (req, res) {
+  // req.body.userId
+  // req.body.dueId
+  // req.body.description
+  // req.body.amount
+
+  console.log("====== UPDATE DUE REQ BODY ======");
+  console.log(req.body);
+  console.log("=================================");
+
   const dueCategory = req.body.category;
-  /*
-  req.body.index
-  req.body.description
-  req.body.amount
-  */
+
   User.findById(req.body.userId, function (err, user) {
-    user[dueCategory][req.body.index].set({
+    user.dueCategory.id(req.body.dueId).set({
       description: req.body.description,
       amount: req.body.amount
     });
 
 
-    user.save(function (err) {
-      if (err) throw err;
-      res.send("Due Update");
+    user.save(function (error) {
+      if (error) throw error;
+      res.send("Due Updated");
     });
   });
 
@@ -132,22 +181,30 @@ User.updateDue = function (req, res) {
 // =================================================
 // DELETE EXISTING DUE
 // =================================================
-User.deleteDue = function (req, res) {
+UserController.deleteDue = function (req, res) {
+  // req.body.category
+  // req.body.userId
+  // req.body.dueId
+
+  console.log("====== DELETE DUE REQ BODY ======");
+  console.log(req.body);
+  console.log("=================================");
+
   const dueCategory = req.body.category;
 
   User.findById(req.body.userId, function (err, user) {
-    user[dueCategory][req.body.index].remove();
+    user.dueCategory.id(req.body.dueId).remove();
 
-  user.save(function (err) {
-    if (err) throw err;
-    res.send("Due Deleted");
-  })
-
+    user.save(function (err) {
+      if (err) throw err;
+      res.send("Due Deleted");
+    });
+  });
 }
 
 // generates both hash and salt
-function genereateHash(password) {
+function generateHash(password) {
   return bcrypt.hashSync(password, bcrypt.genSaltSync(8), null);
 }
 
-module.exports = User;
+module.exports = UserController;

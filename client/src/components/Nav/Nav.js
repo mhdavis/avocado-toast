@@ -1,7 +1,8 @@
 import React from "react";
+import "./navbar.css";
 
 const Nav = () =>
-  <nav className="navbar navbar-inverse navbar-top">
+  <nav className="navbar navbar-inverse navbar-top at-navbar">
     <div className="container-fluid">
       <div className="navbar-header">
         <button type="button" className="collapsed navbar-toggle">
