@@ -59,7 +59,7 @@ class Tile extends Component {
                     value={this.state.description}
                     onChange={this.handleInputChange}
                     name="description"
-                    placeholder="Description (required)"
+                    placeholder="Description"
                   />
                 </Col>
 
@@ -68,7 +68,7 @@ class Tile extends Component {
                     value={this.state.amount}
                     onChange={this.handleInputChange}
                     name="amount"
-                    placeholder="Amount (required)"
+                    placeholder="Amount"
                   />
                 </Col>
 
