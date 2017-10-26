@@ -1,12 +1,10 @@
 import React, { Component } from "react";
-import Jumbotron from "../../components/Jumbotron";
 import API from "../../utils/API";
-import { Link } from "react-router-dom";
-import { Col, Row, Container } from "../../components/Grid";
-import { List, ListItem } from "../../components/List";
-import { Input, TextArea, FormBtn } from "../../components/Form";
+import { Col, Row } from "../../components/Grid";
+import { Input, FormBtn } from "../../components/Form";
 import DueList from "../../components/DueList";
 import DueItem from "../../components/DueItem";
+import "./Tile.css";
 
 class Tile extends Component {
   state = {
@@ -16,6 +14,14 @@ class Tile extends Component {
   // componentDidMount() => {
   //   this.getDues(this.state.category);
   // }
+
+  calculateDueTotal = () => {
+    let total = this.state.dues.reduce(function (due, value) {
+      return parseInt(due.amount, 10) + value;
+    });
+
+    this.setState({total: total});
+  }
 
   loadDues = () => {
     API.getDues(this.props.categoryName)
@@ -44,40 +50,52 @@ class Tile extends Component {
 
   render() {
     return (
-          <Col size="md-6">
-            <Jumbotron jumboClass={this.props.tileClass}>
-              <h1>{this.props.tileName}</h1>
-            </Jumbotron>
+          <div className="at-tile">
+            <h1 className="text-center">{this.props.tileName}</h1>
             <form>
-              <Input
-                value={this.state.description}
-                onChange={this.handleInputChange}
-                name="description"
-                placeholder="Description (required)"
-              />
-              <Input
-                value={this.state.amount}
-                onChange={this.handleInputChange}
-                name="amount"
-                placeholder="Amount (required)"
-              />
-              <FormBtn
-                disabled={!(this.state.description && this.state.amount)}
-                onClick={this.handleFormSubmit}
-              >
-                Submit Due
-              </FormBtn>
+              <Row>
+                <Col size="md-5">
+                  <Input
+                    value={this.state.description}
+                    onChange={this.handleInputChange}
+                    name="description"
+                    placeholder="Description (required)"
+                  />
+                </Col>
+
+                <Col size="md-4">
+                  <Input
+                    value={this.state.amount}
+                    onChange={this.handleInputChange}
+                    name="amount"
+                    placeholder="Amount (required)"
+                  />
+                </Col>
+
+                <Col size="md-3">
+                  <FormBtn
+                    disabled={!(this.state.description && this.state.amount)}
+                    onClick={this.handleFormSubmit}
+                  >
+                    Submit Due
+                  </FormBtn>
+                </Col>
+              </Row>
             </form>
+
             {this.state.dues.length ? (
-              <DueList>
-                {this.state.dues.map(due => (
-                  <DueItem description={due.description} amount={due.amount} key={due._id}/>
-                ))}
-              </DueList>
+              <div>
+                <DueList>
+                  {this.state.dues.map(due => (
+                    <DueItem description={due.description} amount={due.amount} key={due._id}/>
+                  ))}
+                </DueList>
+                <h3>Total: {this.state.total}</h3>
+              </div>
             ) : (
               <h3>No Dues to Display</h3>
             )}
-          </Col>
+          </div>
     );
   }
 }

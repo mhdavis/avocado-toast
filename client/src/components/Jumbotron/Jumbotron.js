@@ -5,7 +5,7 @@ import "./monthly-income.css";
 
 const Jumbotron = (props) =>
   (
-    <div style={{ height: 300 }} className={`jumbotron ${props.jumboClass}-jumbo`}>
+    <div style={{ height: 250 }} className={`jumbotron ${props.jumboClass}-jumbo`}>
       {props.children}
     </div>
   );

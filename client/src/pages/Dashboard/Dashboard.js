@@ -7,11 +7,17 @@ class Dashboard extends Component {
     return (
       <Container fluid>
         <Row>
-          <Tile tileName={"Monthly Income"} tileClass={"monthly-income"} categoryName={"monthly_income"}/>
-          <Tile tileName={"Monthly Expenses"} tileClass={"monthly-expenses"} categoryName={"monthly_expenses"}/>
+          <Col size="md-6">
+            <Tile tileName={"Monthly Income"} tileClass={"monthly-income"} categoryName={"monthly_income"}/>
+          </Col>
+          <Col size="md-6">
+            <Tile tileName={"Monthly Expenses"} tileClass={"monthly-expenses"} categoryName={"monthly_expenses"}/>
+          </Col>
         </Row>
         <Row>
-          <Tile tileName={"Longterm Expenses"} tileClass={"longterm-expenses"} categoryName={"longterm_expenses"}/>
+          <Col size="md-6">
+            <Tile tileName={"Longterm Expenses"} tileClass={"longterm-expenses"} categoryName={"longterm_expenses"}/>
+          </Col>
         </Row>
       </Container>
     );
