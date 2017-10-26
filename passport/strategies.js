@@ -6,35 +6,45 @@ const bCrypt = require("bcrypt-nodejs");
 // =================================================
 // SERIALIZATION AND DESERIALIZATION FUNCTIONS
 // =================================================
-passport.serializeUser(function(user, done) {
-    done(null, user._id);
-});
-
-passport.deserializeUser(function(id, done) {
-  User.findById(id, function(err, user) {
-    done(err, user);
-  });
-});
+// passport.serializeUser(function(user, done) {
+//   console.log("=========SERIALIZE==========");
+//   console.log(user);
+//   console.log(done);
+//   console.log("=========SERIALIZE==========");
+//
+//     done(null, user._id);
+// });
+//
+// passport.deserializeUser(function(id, done) {
+//   console.log("=======DESERIALIZE==========");
+//   console.log(id);
+//   console.log(done);
+//   console.log("=======DESERIALIZE==========");
+//
+//   User.findById(id, function(err, user) {
+//     done(err, user);
+//   });
+// });
 
 // =================================================
 // SIGNIN STRATEGY + IMPLEMENTATION
 // =================================================
-passport.use('signin', new LocalStrategy (
-  function (username, password, done) {
-    User.findOne({ username: username }, function (err, user) {
-      if (err) throw err;
-
-      User.comparePassword(password, user.password, function (err, isMatch) {
-        if (err) throw err;
-        if (isMatch) {
-          return done (null, user)
-        } else {
-          return done (null, false);
-        }
-      });
-    });
-  }
-));
+// passport.use('signin', new LocalStrategy (
+//   function (username, password, done) {
+//     User.findOne({ username: username }, function (err, user) {
+//       if (err) throw err;
+//
+//       User.comparePassword(password, user.password, function (err, isMatch) {
+//         if (err) throw err;
+//         if (isMatch) {
+//           return done (null, user)
+//         } else {
+//           return done (null, false);
+//         }
+//       });
+//     });
+//   }
+// ));
 
 // =================================================
 // SIGNUP STRATEGY + IMPLEMENTATION

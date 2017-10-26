@@ -1,6 +1,7 @@
 require('dotenv').config();
 const express = require("express");
 const path = require("path");
+const http = require('http');
 const PORT = process.env.PORT || 3001;
 const app = express();
 const passport = require("passport");
@@ -15,6 +16,7 @@ const session = require("express-session");
 const cookieParser = require("cookie-parser");
 const bodyParser = require("body-parser");
 const MongoStore = require('connect-mongo')(session);
+const LocalStrategy = require("passport-local").Strategy;
 
 // Passport + Session Configuration
 // =======================================================
@@ -28,6 +30,12 @@ app.use(session({
  }));
 app.use(passport.initialize());
 app.use(passport.session());
+
+const User = require("./models/User");
+passport.use(new LocalStrategy(User.authenticate()));
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
+
 
 // Import routes and give the server access to them.
 // =======================================================
