@@ -14,55 +14,17 @@ were in the callback slot of each route handler.
 // =================================================
 // AUTHENTICATE USER AND RETURN USER DATA
 // =================================================
-router.post('/signin', passport.authenticate('local'), function (req, res) {
-  res.json(req.user);
-});
+router.post('/signin', userController.signin);
 
 // =================================================
 // END USER SESSION
 // =================================================
-router.get("/signout", function (req, res) {
-    req.logout();
-    res.send('user logged out');
-});
+router.get("/signout", userController.signout);
 
 // =================================================
 // CREATE NEW USER
 // =================================================
-router.post('/signup', function (req, res) {
-  console.log(req.body);
-  User.register(
-    {
-      username: req.body.username,
-      name: req.body.name
-    },
-    req.body.password,
-    function (err, user) {
-      if (err) {
-        throw err;
-      }
-      let authenticate = User.authenticate();
-      console.log("============ OUTSIDE ============");
-      console.log(req.body.username);
-      console.log(req.body.password);
-      console.log(user);
-      console.log("============ OUTSIDE ============");
-      authenticate(req.body.username, req.body.password, function (error, result) {
-        console.log("============ RESULT ============");
-        console.log(error);
-        console.log(result);
-        console.log("============ RESULT ============");
-
-        if (error) {
-          console.log("============ INTERNAL ERROR ============");
-          console.log(error);
-          console.log("============ INTERNAL ERROR ============");
-        }
-        res.json(result);
-      });
-    }
-  );
-});
+router.post('/signup', userController.create);
 
 // =================================================
 // DELETE AN EXISTING USER ACCOUNT
