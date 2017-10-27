@@ -30,7 +30,7 @@ const UserSchema = new Schema({
 });
 
 UserSchema.plugin(passportLocalMongoose, {
-  usernameUnique: false,
+  usernameUnique: true,
   findByUsername: function (model, queryParameters) {
     queryParameters.active = true;
     return model.findOne(queryParameters);

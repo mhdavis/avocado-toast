@@ -32,14 +32,15 @@ router.get("/signout", function (req, res) {
 router.post('/signup', function (req, res) {
   console.log(req.body);
   User.register(
-    {
+    new User ({
       username: req.body.username,
-      name: req.body.name
-    },
+      name: req.body.name,
+      active: true
+    }),
     req.body.password,
     function (err, user) {
       if (err) {
-        throw err;
+        console.log(err);
       }
       let authenticate = User.authenticate();
       console.log("============ OUTSIDE ============");
