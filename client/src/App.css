@@ -18,3 +18,27 @@ body {
     border-radius: 0px;
     margin: 0.5em;
 }
+form {
+    display: block;
+    margin-top: 0em;
+    background-color: rgba(118, 73, 37, .2);
+    padding: 1em;
+    padding-top: 1em;
+    padding-right: 1em;
+    padding-bottom: 3em;
+    padding-left: 1em;
+    border-radius: 5px;
+    margin: 0.5em;
+}
+.form-control {
+    color: rgba(0, 0, 0, .1);
+    background-color: rgba(0, 0, 0, .5);
+    background-image: none;
+    border: 1px solid #cccccc;
+    border-radius: 4px;
+    -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,0.075);
+    box-shadow: inset 0 1px 1px rgba(0,0,0,0.075);
+    -webkit-transition: border-color ease-in-out .15s,-webkit-box-shadow ease-in-out .15s;
+    -o-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+    transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+}

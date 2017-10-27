@@ -54,13 +54,13 @@ class SignInForm extends Component {
                 value={this.state.description}
                 onChange={this.handleInputChange}
                 name="username"
-                placeholder="username (required)"
+                placeholder="username"
               />
               <Input
                 value={this.state.amount}
                 onChange={this.handleInputChange}
                 name="password"
-                placeholder="password (required)"
+                placeholder="password"
               />
               <FormBtn
                 disabled={!(this.state.description && this.state.amount)}
